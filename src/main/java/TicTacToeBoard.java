@@ -1,6 +1,3 @@
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -10,7 +7,6 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -20,13 +16,14 @@ import javafx.util.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class TicTacToeBoard extends Application {
 
     private boolean playerTurnX = true;
-    private boolean playable = true; //zmienna pomocnicza , okresla czy mozna grac dalej
+    private boolean playable = true;            //zmienna pomocnicza , okresla czy mozna grac dalej
     private Plate[][] stage = new Plate[3][3];
-    private List<CheckingTheWinner> winner = new ArrayList<>();     //lista
+    private List<CheckingTheWinner> winner = new ArrayList<>();
+          //listy przechowujace
+
 
     private GridPane board = new GridPane();
 
@@ -39,13 +36,15 @@ public class TicTacToeBoard extends Application {
                 Plate rectangle = new Plate();
                 rectangle.setTranslateX(j * 300);
                 rectangle.setTranslateY(i * 300);
-
                 board.getChildren().add(rectangle);
                 stage[j][i] = rectangle;
+
+
             }
         }
         for (int y = 0; y < 3; y++) {       //zwyciezca, gdy znaki sa POZIOMO
             winner.add(new CheckingTheWinner(stage[0][y], stage[1][y], stage[2][y]));
+
         }
         for (int x = 0; x < 3; x++) {       //zwyciezca, gdy znaki sa PIONOWO
             winner.add(new CheckingTheWinner(stage[x][0], stage[x][1], stage[x][2]));
@@ -55,8 +54,20 @@ public class TicTacToeBoard extends Application {
         //zwyciezca, gdy znaki sa SKOS od pawej gory
         winner.add(new CheckingTheWinner(stage[2][0], stage[1][1], stage[0][2]));
 
+//        //mozliwe remisy z udzialem O - kolko
+//        draw.add(new CheckingTheWinner(stage[0][0],stage[1][1],stage[1][2],stage[2][1])); //v1
+//        draw.add(new CheckingTheWinner(stage[0][1],stage[1][1],stage[2][0],stage[2][2])); //v2
+//        draw.add(new CheckingTheWinner(stage[0][0],stage[0][2],stage[1][1],stage[2][1])); //v3
+//        draw.add(new CheckingTheWinner(stage[0][2],stage[1][0],stage[1][1],stage[2][1])); //v4
+//        draw.add(new CheckingTheWinner(stage[0][0],stage[1][1],stage[1][2],stage[2][0])); //v5
+//        draw.add(new CheckingTheWinner(stage[0][0],stage[1][1],stage[1][2],stage[2][0])); //v6
+//        draw.add(new CheckingTheWinner(stage[0][2],stage[1][0],stage[1][1],stage[2][2])); //v7
+//        draw.add(new CheckingTheWinner(stage[0][1],stage[1][1],stage[1][2],stage[2][0])); //v8
+
         return board;
+
     }
+
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -64,6 +75,7 @@ public class TicTacToeBoard extends Application {
         primaryStage.setTitle("Tic - Toc - Toe GAME");
         primaryStage.setScene(new Scene(createBoard()));        //wywolanie metody tworzacej scene
         primaryStage.show();                        //show wyswietlenie sceny
+
     }
 
     private void gameStatus() {          //metoda
@@ -72,14 +84,12 @@ public class TicTacToeBoard extends Application {
                 playable = false;
                 winnerAnimation(win);
 
-                if (win.weHaveDraw()) {
-                    drawAnimation(win);
-                    playable = false;
+                        break;
+
                 }
-                break;
             }
         }
-    }
+
 
     private void winnerAnimation(CheckingTheWinner win) {          //animacja wygranej
 
@@ -117,6 +127,7 @@ public class TicTacToeBoard extends Application {
         anim1.play();
         board.getChildren().add(t1);
         System.out.println("DRAW");
+
     }
 
     public class CheckingTheWinner {           //metoda spadza pion, poziom, skos czy sa 3 takie same znaki (eqals)
@@ -132,11 +143,12 @@ public class TicTacToeBoard extends Application {
             return plates[0].getValue().equals(plates[1].getValue()) && plates[0].getValue().equals(plates[2].getValue());
         }
 
-        public boolean weHaveDraw() {            //remis
-            if (plates[0].getValue().isEmpty())
-                return false;
-            return !plates[0].getValue().equals(plates[1].getValue()) && !plates[0].getValue().equals(plates[2].getValue());
-        }
+//        public boolean isDraw() {
+//            if (plates[0].getValue().isEmpty())
+//                return true;
+//            return !plates[0].getValue().equals(plates[1].getValue()) && plates[0].getValue().equals(plates[2].getValue());
+//
+//        }
     }
 
     private class Plate extends StackPane { //czyt.
@@ -148,6 +160,7 @@ public class TicTacToeBoard extends Application {
             circuit.setFill(null);            //setfill czyt.
             circuit.setStroke(Color.FORESTGREEN);                //kolor obwodu prostokatow planszy(RAMKA)
             circuit.setStrokeWidth(10);                      //grubosc lini planszy 3x3
+
             text.setFont(Font.font(200));                //wielkosc czcionki, znaczka "X"
             setAlignment(Pos.CENTER);
             getChildren().addAll(circuit, text);      //dodanie ramki kwadratow oraz obietku text(klikacza) do children
