@@ -141,6 +141,7 @@ public class TicTacToeBoard extends Application {
             if (plates[0].getValue().isEmpty())
                 return false;
             return plates[0].getValue().equals(plates[1].getValue()) && plates[0].getValue().equals(plates[2].getValue());
+
         }
 
 //        public boolean isDraw() {
